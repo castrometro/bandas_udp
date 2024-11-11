@@ -1,27 +1,24 @@
 // src/components/Layout/Navigation.tsx
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import {Music2, Calendar, Users, Settings, LogOut, Guitar} from 'lucide-react';
+import {Music2, LogOut, Guitar} from 'lucide-react';
 import { useState } from 'react';
 import {motion} from "framer-motion";
 
 export default function Navigation() {
-  const { state, dispatch } = useAuth();
+  const { dispatch, logout } = useAuth();
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await logout();
     dispatch({ type: 'LOGOUT' });
-    // Puedes agregar lógica adicional para limpiar tokens o redirigir al login
   };
 
   const navItems = [
     { name: 'Dashboard', icon: <Music2 className="h-5 w-5 mr-2" />, path: '/dashboard' },
   ];
 
-  // if (state.user?.is_udp) {
-  //   navItems.push({ name: 'Bandas', icon: <Users className="h-5 w-5 mr-2" />, path: '/bands' });
-  // }
 
 
   return (

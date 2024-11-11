@@ -32,7 +32,7 @@ export default function LoginForm() {
 
       toast.success('Inicio de sesión exitoso!');
       // Redirigir después de un breve retraso para que el usuario vea la notificación
-      navigate('/dashboard'); // Asegúrate de tener esta ruta y componente
+      navigate('/dashboard');
 
     } catch (error: any) {
       console.error('Error de inicio de sesión:', error);

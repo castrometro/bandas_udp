@@ -3,6 +3,7 @@
 import { createContext, useContext, useReducer, useEffect, ReactNode } from 'react';
 import axiosInstance from '../api/axios';
 import { AuthState, User } from '../types';
+import {getCSRFToken} from "../../utils/csrf.tsx";
 
 type AuthAction =
     | { type: 'LOGIN_START' }
@@ -20,7 +21,8 @@ const AuthContext = createContext<{
   state: AuthState;
   dispatch: React.Dispatch<AuthAction>;
   checkAuth: () => Promise<void>;
-}>({ state: initialState, dispatch: () => null, checkAuth: async () => {} });
+  logout: () => Promise<void>; // Añadimos logout al contexto
+}>({ state: initialState, dispatch: () => null, checkAuth: async () => {}, logout: async () => {} });
 
 function authReducer(state: AuthState, action: AuthAction): AuthState {
   switch (action.type) {
@@ -62,13 +64,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  // Nueva función logout
+  const logout = async () => {
+    try {
+      await axiosInstance.post('/api/application/logout/',{},{
+        headers: {
+          'X-CSRFToken': getCSRFToken(),
+        },
+      });
+      dispatch({ type: 'LOGOUT' });
+    } catch (error) {
+      console.error('Error al intentar cerrar sesión:', error);
+    }
+  };
+
   // Verificar autenticación al cargar el componente
   useEffect(() => {
     checkAuth();
   }, []);
 
   return (
-      <AuthContext.Provider value={{ state, dispatch, checkAuth }}>
+      <AuthContext.Provider value={{ state, dispatch, checkAuth, logout }}>
         {children}
       </AuthContext.Provider>
   );

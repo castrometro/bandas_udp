@@ -114,12 +114,12 @@ class BandMemberViewSet(viewsets.ModelViewSet) :
     queryset = BandMember.objects.all()
     serializer_class = BandMemberSerializer
     permission_classes = [IsAuthenticated, IsBandMember]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['band']
 
     def perform_create(self, serializer) :
         band = serializer.validated_data['band']
         user = self.request.user
-        print(user)
-
         # Verificar que el usuario es miembro UDP de la banda
         if not BandMember.objects.filter(band=band, user=user).exists() :
             raise ValidationError("Solo miembros UDP de la banda pueden agregar o remover integrantes.")
@@ -247,7 +247,11 @@ class UserRegistrationView(generics.CreateAPIView):
     serializer_class = UserRegistrationSerializer
     permission_classes = [AllowAny]
 
+class UserLogoutView(APIView):
 
+    def post(self, request):
+        logout(request)
+        return Response({"message": "Successfully logged out"}, status=status.HTTP_200_OK)
 class UserLoginView(APIView):
     def post(self, request):
         form = AuthenticationForm(data=request.data)
