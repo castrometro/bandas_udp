@@ -1,6 +1,6 @@
 // src/App.tsx
 
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 
 import ProtectedLayout from './components/layout/ProtectedLayout';
@@ -20,7 +20,6 @@ function App() {
       <AuthProvider>
         <Router>
           <Routes>
-            {/* Rutas Públicas */}
             <Route path="/" element={<AuthForm />} />
 
             {/*<Route path="/login" element={<LoginForm />} />*/}
@@ -37,9 +36,6 @@ function App() {
                 {/* Puedes añadir más rutas protegidas aquí */}
               </Route>
             </Route>
-
-            {/* Ruta Raíz Redirecciona al Dashboard si está autenticado */}
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
             {/* Ruta 404 */}
             <Route path="*" element={<h1>Página no encontrada</h1>} />

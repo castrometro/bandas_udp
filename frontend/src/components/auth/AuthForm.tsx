@@ -4,9 +4,20 @@ import { motion, AnimatePresence } from 'framer-motion';
 import RegisterForm from './RegisterForm';
 import LoginForm from './LoginForm';
 import { Guitar } from 'lucide-react';
+import Loader from "../common/Loader.tsx";
+import {useAuth} from "../../context/AuthContext.tsx";
+import {Navigate} from "react-router-dom";
 
 export default function AuthForm() {
     const [isRegistering, setIsRegistering] = useState(false);
+    const { state } = useAuth();
+
+    if (state.loading) {
+        return <Loader />;
+    }
+    if (state.user){
+        return <Navigate to="/dashboard" replace />;
+    }
 
     const toggleForm = () => {
         setIsRegistering((prev) => !prev);
