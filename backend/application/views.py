@@ -257,8 +257,6 @@ class UserLoginView(APIView):
             return Response({"message": "Inicio de sesión exitoso"}, status=status.HTTP_200_OK)
         return Response({"errors": form.errors}, status=status.HTTP_400_BAD_REQUEST)
 
-# application/views.py
-
 
     def perform_create(self, serializer):
         user = self.request.user
