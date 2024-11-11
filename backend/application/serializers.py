@@ -5,22 +5,6 @@ from .models import Band, BandMember, Reservation, Guest, Invitation
 User = get_user_model()
 
 
-class BandMemberSerializer(serializers.ModelSerializer):
-    user = serializers.SerializerMethodField()
-
-    class Meta:
-        model = BandMember
-        fields = ['user', 'joined_at']
-
-    def get_user(self, obj):
-        return {
-            'id': obj.user.id,
-            'username': obj.user.username,
-            'email': obj.user.email,
-            'is_udp': obj.user.is_udp,
-            'ruf': obj.user.ruf
-        }
-
 
 class CurrentUserSerializer(serializers.ModelSerializer):
     current_band = serializers.SerializerMethodField()
@@ -67,6 +51,9 @@ class UserRegistrationSerializer(serializers.ModelSerializer) :
 
         user.save()
         return user
+
+class UserLogoutSerializer(serializers.Serializer):
+    message = serializers.CharField(read_only=True, default="Successfully logged out")
 
 class UserLoginSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, min_length=8)
@@ -143,6 +130,7 @@ class BandMemberSerializer(serializers.ModelSerializer) :
         fields = ['id', 'band', 'user', 'joined_at']
         read_only_fields = ['id', 'joined_at']
 
+
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         representation['user'] = UserSerializer(instance.user).data
@@ -161,6 +149,7 @@ class BandMemberSerializer(serializers.ModelSerializer) :
                     "Un Usuario UDP solo puede pertenecer a una banda como miembro permanente."
                 )
         return attrs
+
 
 
 

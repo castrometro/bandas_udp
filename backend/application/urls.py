@@ -12,7 +12,7 @@ from .views import (
     InvitationViewSet,
     UserLoginView,
     DashboardStatsView,
-    CurrentUserView,
+    CurrentUserView, UserLogoutView,
 )
 
 router = DefaultRouter()
@@ -26,7 +26,9 @@ router.register(r'invitations', InvitationViewSet, basename='invitation')
 urlpatterns = [
     path('', include(router.urls)),
     path('register/', UserRegistrationView.as_view(), name='user-registration'),
+
     path('login/', UserLoginView.as_view(), name='user-login'),
+    path('logout/', UserLogoutView.as_view(), name='user-login'),
     path('dashboard/stats/', DashboardStatsView.as_view(), name='dashboard-stats'),
     path('current-user/', CurrentUserView.as_view(), name='current-user'),
 ]
